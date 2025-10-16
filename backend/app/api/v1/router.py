@@ -1,6 +1,6 @@
 """API v1 router - combines all endpoint routers"""
 from fastapi import APIRouter
-from app.api.v1.endpoints import auth, users
+from app.api.v1.endpoints import auth, users, maintenance, rentals, store, admin
 
 # Create main API router
 api_router = APIRouter()
@@ -19,7 +19,30 @@ api_router.include_router(
     tags=["Users"]
 )
 
-# Add more routers as we build them
-# api_router.include_router(maintenance.router, prefix="/maintenance", tags=["Maintenance"])
-# api_router.include_router(rentals.router, prefix="/rentals", tags=["Rentals"])
-# api_router.include_router(store.router, prefix="/store", tags=["Store"])
+# Include mobile car maintenance routes
+api_router.include_router(
+    maintenance.router,
+    prefix="/maintenance",
+    tags=["Mobile Maintenance"]
+)
+
+# Include car rentals routes
+api_router.include_router(
+    rentals.router,
+    prefix="/rentals",
+    tags=["Car Rentals"]
+)
+
+# Include online store routes
+api_router.include_router(
+    store.router,
+    prefix="/store",
+    tags=["Online Auto Store"]
+)
+
+# Include admin routes
+api_router.include_router(
+    admin.router,
+    prefix="/admin",
+    tags=["Admin Panel"]
+)

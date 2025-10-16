@@ -1,37 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* -----------------------------
-   🌈 Custom Global Styles
-------------------------------*/
+@layer base {
+  body {
+    @apply bg-midnight-950 text-gray-100 font-sans antialiased;
+    background-image: radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.05) 0%, transparent 50%);
+  }
 
-/* Font smoothing for better text rendering */
-html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
-/* Default body styles */
-body {
-  @apply bg-gray-50 text-gray-900;
-  font-family: "Inter", sans-serif;
-  line-height: 1.6;
+@layer components {
+  .btn {
+    @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300 inline-flex items-center justify-center gap-2;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-500 text-white hover:from-primary-700 hover:to-primary-600 shadow-lg hover:shadow-red-glow active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-dark-800 text-white hover:bg-dark-700 border border-dark-600 active:scale-95;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white active:scale-95;
+  }
+
+  .card {
+    @apply bg-dark-900/80 backdrop-blur-lg rounded-2xl border border-dark-700/50 shadow-dark-xl overflow-hidden;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:border-primary-500/50 hover:shadow-red-glow hover:-translate-y-1;
+  }
+
+  .input {
+    @apply w-full px-4 py-3 bg-dark-800 border border-dark-600 rounded-lg text-white placeholder-gray-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all;
+  }
+
+  .heading-1 {
+    @apply font-display text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-400 via-primary-500 to-red-600 bg-clip-text text-transparent;
+  }
+
+  .badge {
+    @apply px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1;
+  }
+
+  .badge-primary {
+    @apply bg-primary-500/20 text-primary-400 border border-primary-500/30;
+  }
 }
 
-/* Scrollbar styling (optional) */
 ::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: rgba(100, 116, 139, 0.3);
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(100, 116, 139, 0.5);
+  width: 10px;
 }
 
-/* Smooth transitions for theme changes or hover effects */
-* {
-  @apply transition-colors duration-200;
+::-webkit-scrollbar-track {
+  background: #0F172A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #DC2626, #EF4444);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #B91C1C, #DC2626);
+}
+
+::selection {
+  background-color: rgba(239, 68, 68, 0.3);
+  color: white;
 }
