@@ -109,7 +109,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-gray-900 via-gray-800 to-black relative overflow-hidden">
+    <div className="min-h-screen flex bg-midnight-950 relative overflow-hidden pt-20 lg:pt-0" style={{ zoom: window.innerWidth >= 1024 ? '0.8' : '1' }}>
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
@@ -118,53 +118,113 @@ const Register = () => {
         }}></div>
       </div>
 
-      {/* Red Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-red-600/10 via-transparent to-red-600/10"></div>
+      {/* Left Column - Branding & Image */}
+      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-orange-600 via-red-500 to-red-600 p-12 items-center justify-center overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-yellow-300 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        </div>
 
-      <div className="max-w-md w-full relative z-10">
-        <div className="text-center mb-8 animate-fade-in-up">
-          <Link to="/" className="inline-block mb-6 group">
-            <div className="flex items-center justify-center space-x-3">
-              <div className="relative">
-                <div className="absolute inset-0 bg-red-500/30 blur-xl rounded-full animate-pulse-slow"></div>
-                <img
-                  src={zipLogo}
-                  alt="ZIP Platform"
-                  className="relative w-16 h-16 rounded-2xl shadow-2xl shadow-red-500/50 group-hover:scale-110 transition-transform duration-300 border-2 border-red-500/30"
-                />
-              </div>
+        <div className="relative z-10 max-w-lg text-white">
+          <Link to="/" className="inline-block mb-8 group">
+            <div className="flex items-center space-x-4">
+              <img
+                src={zipLogo}
+                alt="ZIP Platform"
+                className="w-20 h-20 rounded-3xl shadow-2xl group-hover:scale-110 transition-transform duration-300 border-4 border-white/30"
+              />
               <div>
-                <span className="text-white font-bold text-3xl block">ZIP Platform</span>
-                <span className="text-red-400 text-xs uppercase tracking-wider">Auto Services</span>
+                <span className="text-white font-black text-5xl block">ZIP</span>
+                <span className="text-white/90 text-sm uppercase tracking-widest">Platform</span>
               </div>
             </div>
           </Link>
-          <h2 className="text-4xl font-bold text-white mb-3 mt-8">
-            Create Account ✨
-          </h2>
-          <p className="text-gray-400 text-lg">
-            Join 5,000+ satisfied customers today!
+
+          <h1 className="text-5xl md:text-6xl font-black mb-6 leading-tight">
+            Join 5,000+ Happy Customers
+          </h1>
+
+          <p className="text-xl text-white/90 mb-12 leading-relaxed">
+            Create your account today and unlock access to premium automotive services across Ghana.
           </p>
 
-          {/* Benefits */}
-          <div className="mt-6 grid grid-cols-3 gap-3">
-            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-3 text-center hover:bg-white/20 transition-all">
-              <div className="text-2xl mb-1">🎉</div>
-              <p className="text-xs text-white font-medium">Easy Signup</p>
+          {/* Benefits List */}
+          <div className="space-y-4">
+            <div className="flex items-start space-x-4">
+              <div className="text-4xl">✓</div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">Free to Join</h3>
+                <p className="text-white/80 text-sm">No hidden fees or charges to create your account</p>
+              </div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-3 text-center hover:bg-white/20 transition-all">
-              <div className="text-2xl mb-1">💳</div>
-              <p className="text-xs text-white font-medium">Secure Payment</p>
+            <div className="flex items-start space-x-4">
+              <div className="text-4xl">🔒</div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">Secure & Private</h3>
+                <p className="text-white/80 text-sm">Your data is protected with industry-standard encryption</p>
+              </div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-3 text-center hover:bg-white/20 transition-all">
-              <div className="text-2xl mb-1">⭐</div>
-              <p className="text-xs text-white font-medium">24/7 Support</p>
+            <div className="flex items-start space-x-4">
+              <div className="text-4xl">⚡</div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">Instant Access</h3>
+                <p className="text-white/80 text-sm">Start booking services immediately after signup</p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-4">
+              <div className="text-4xl">🎁</div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">Welcome Bonus</h3>
+                <p className="text-white/80 text-sm">Get special discounts on your first booking</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Trust Badge */}
+          <div className="mt-12 bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+            <div className="flex items-center gap-4">
+              <div className="text-5xl">⭐</div>
+              <div>
+                <div className="text-2xl font-black mb-1">4.9/5</div>
+                <div className="text-sm text-white/80">Average rating from 2,500+ reviews</div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <Card className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-          <form onSubmit={handleSubmit} className="space-y-5 p-8">
+      {/* Right Column - Registration Form */}
+      <div className="flex-1 flex items-center justify-center p-8 lg:p-12 relative z-10">
+        <div className="w-full max-w-md">
+          {/* Mobile Logo */}
+          <div className="lg:hidden text-center mb-8">
+            <Link to="/" className="inline-block mb-6 group">
+              <div className="flex items-center justify-center space-x-3">
+                <img
+                  src={zipLogo}
+                  alt="ZIP Platform"
+                  className="w-16 h-16 rounded-2xl shadow-2xl group-hover:scale-110 transition-transform duration-300"
+                />
+                <div>
+                  <span className="text-white font-bold text-3xl block">ZIP Platform</span>
+                  <span className="text-red-400 text-xs uppercase tracking-wider">Auto Services</span>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          <div className="mb-8">
+            <h2 className="text-4xl font-bold text-white mb-3">
+              Create Account ✨
+            </h2>
+            <p className="text-gray-400 text-lg">
+              Join thousands of satisfied customers today!
+            </p>
+          </div>
+
+          <Card className="border-dark-700/50">
+            <form onSubmit={handleSubmit} className="space-y-5 p-8">
             {/* API Error Display */}
             {errors.api && (
               <div className="p-3 bg-red-800 bg-opacity-30 text-red-300 rounded text-sm">
@@ -305,34 +365,9 @@ const Register = () => {
                 )}
               </button>
             </div>
-
-            {/* Success Indicators */}
-            <div className="mt-8 pt-6 border-t border-gray-700">
-              <div className="text-center mb-4">
-                <p className="text-xs text-gray-400 uppercase tracking-wider font-bold">Trusted By</p>
-              </div>
-              <div className="grid grid-cols-4 gap-3 text-center">
-                <div className="group hover:scale-105 transition-transform">
-                  <div className="text-xl mb-1">🏆</div>
-                  <p className="text-xs text-gray-400 font-medium">Top Rated</p>
-                </div>
-                <div className="group hover:scale-105 transition-transform">
-                  <div className="text-xl mb-1">🔐</div>
-                  <p className="text-xs text-gray-400 font-medium">Secure</p>
-                </div>
-                <div className="group hover:scale-105 transition-transform">
-                  <div className="text-xl mb-1">⚡</div>
-                  <p className="text-xs text-gray-400 font-medium">Fast</p>
-                </div>
-                <div className="group hover:scale-105 transition-transform">
-                  <div className="text-xl mb-1">✓</div>
-                  <p className="text-xs text-gray-400 font-medium">Verified</p>
-                </div>
-              </div>
-            </div>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-gray-700 text-center">
+          <div className="mt-6 pt-6 border-t border-dark-700 text-center px-8">
             <p className="text-gray-400">
               Already have an account?{" "}
               <Link
@@ -344,6 +379,15 @@ const Register = () => {
             </p>
           </div>
         </Card>
+
+        {/* Trust Badge */}
+        <div className="mt-8 text-center text-sm text-gray-500">
+          <p className="flex items-center justify-center gap-2">
+            <span className="text-green-500">🔒</span>
+            Your information is protected and will never be shared
+          </p>
+        </div>
+        </div>
       </div>
     </div>
   );

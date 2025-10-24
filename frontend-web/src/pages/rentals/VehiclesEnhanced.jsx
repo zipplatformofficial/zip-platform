@@ -65,10 +65,14 @@ const VehiclesEnhanced = () => {
     try {
       setLoading(true);
       const data = await rentalService.getVehicles();
-      setVehicles(data);
-      setFilteredVehicles(data);
+      const vehiclesArray = Array.isArray(data) ? data : [];
+      setVehicles(vehiclesArray);
+      setFilteredVehicles(vehiclesArray);
     } catch (error) {
       toast.error('Failed to load vehicles');
+      console.error('Error fetching vehicles:', error);
+      setVehicles([]); // Set empty array on error to prevent filter errors
+      setFilteredVehicles([]);
     } finally {
       setLoading(false);
     }

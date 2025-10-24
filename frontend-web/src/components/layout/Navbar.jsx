@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { FiMenu, FiX, FiUser, FiShoppingCart, FiLogOut } from 'react-icons/fi';
-import { useAuth } from '../../hooks/useAuth';
-import { useCart } from '../../hooks/useCart';
-import { useLanguage } from '../../context/LanguageContext';
-import Button from '../ui/Button';
-import LanguageSwitcher from '../LanguageSwitcher';
+import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { FiMenu, FiX, FiUser, FiShoppingCart, FiLogOut } from "react-icons/fi";
+import { useAuth } from "../../hooks/useAuth";
+import { useCart } from "../../hooks/useCart";
+import { useLanguage } from "../../context/LanguageContext";
+import Button from "../ui/Button";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,17 +16,17 @@ const Navbar = () => {
   const location = useLocation();
 
   const navigation = [
-    { name: t('home'), path: '/' },
-    { name: t('maintenance'), path: '/maintenance' },
-    { name: t('rentals'), path: '/rentals' },
-    { name: t('store'), path: '/store' },
+    { name: t("home"), path: "/" },
+    { name: t("maintenance"), path: "/maintenance" },
+    { name: t("rentals"), path: "/rentals" },
+    { name: t("store"), path: "/store" },
   ];
 
   const isActive = (path) => location.pathname === path;
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate("/");
   };
 
   const cartItemCount = cart?.items?.length || 0;
@@ -38,7 +38,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <img
-              src="/src/assets/bg-remove/zip-logo-removebg.png"
+              src="https://i.postimg.cc/yYfX6T5z/zip-logo-removebg.png"
               alt="ZIP Platform"
               className="h-16 w-auto"
             />
@@ -52,8 +52,8 @@ const Navbar = () => {
                 to={item.path}
                 className={`text-sm font-medium transition-colors ${
                   isActive(item.path)
-                    ? 'text-red-500'
-                    : 'text-gray-300 hover:text-white'
+                    ? "text-red-500"
+                    : "text-gray-300 hover:text-white"
                 }`}
               >
                 {item.name}
@@ -66,7 +66,10 @@ const Navbar = () => {
             <LanguageSwitcher />
             {user ? (
               <>
-                <Link to="/cart" className="relative p-2 text-gray-300 hover:text-white transition-colors">
+                <Link
+                  to="/cart"
+                  className="relative p-2 text-gray-300 hover:text-white transition-colors"
+                >
                   <FiShoppingCart className="h-6 w-6" />
                   {cartItemCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -74,21 +77,28 @@ const Navbar = () => {
                     </span>
                   )}
                 </Link>
-                <Link to="/dashboard" className="text-gray-300 hover:text-white transition-colors">
+                <Link
+                  to="/dashboard"
+                  className="text-gray-300 hover:text-white transition-colors"
+                >
                   <FiUser className="h-6 w-6" />
                 </Link>
                 <Button variant="ghost" size="sm" onClick={handleLogout}>
                   <FiLogOut className="h-4 w-4 mr-2" />
-                  {t('logout')}
+                  {t("logout")}
                 </Button>
               </>
             ) : (
               <>
                 <Link to="/login">
-                  <Button variant="ghost" size="sm">{t('login')}</Button>
+                  <Button variant="ghost" size="sm">
+                    {t("login")}
+                  </Button>
                 </Link>
                 <Link to="/register">
-                  <Button variant="primary" size="sm">{t('signup')}</Button>
+                  <Button variant="primary" size="sm">
+                    {t("signup")}
+                  </Button>
                 </Link>
               </>
             )}
@@ -99,7 +109,11 @@ const Navbar = () => {
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-dark-800 transition-colors"
           >
-            {isOpen ? <FiX className="h-6 w-6" /> : <FiMenu className="h-6 w-6" />}
+            {isOpen ? (
+              <FiX className="h-6 w-6" />
+            ) : (
+              <FiMenu className="h-6 w-6" />
+            )}
           </button>
         </div>
       </div>
@@ -115,8 +129,8 @@ const Navbar = () => {
                 onClick={() => setIsOpen(false)}
                 className={`block px-3 py-2 rounded-lg text-base font-medium transition-colors ${
                   isActive(item.path)
-                    ? 'bg-primary-500/10 text-primary-500'
-                    : 'text-gray-300 hover:bg-dark-800 hover:text-white'
+                    ? "bg-primary-500/10 text-primary-500"
+                    : "text-gray-300 hover:bg-dark-800 hover:text-white"
                 }`}
               >
                 {item.name}
@@ -144,7 +158,7 @@ const Navbar = () => {
                     className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-gray-300 hover:bg-dark-800 hover:text-white transition-colors"
                   >
                     <FiUser className="h-5 w-5 mr-3" />
-                    {t('dashboard')}
+                    {t("dashboard")}
                   </Link>
                   <button
                     onClick={() => {
@@ -154,16 +168,20 @@ const Navbar = () => {
                     className="w-full flex items-center px-3 py-2 rounded-lg text-base font-medium text-gray-300 hover:bg-dark-800 hover:text-white transition-colors"
                   >
                     <FiLogOut className="h-5 w-5 mr-3" />
-                    {t('logout')}
+                    {t("logout")}
                   </button>
                 </>
               ) : (
                 <>
                   <Link to="/login" onClick={() => setIsOpen(false)}>
-                    <Button variant="ghost" size="md" className="w-full">{t('login')}</Button>
+                    <Button variant="ghost" size="md" className="w-full">
+                      {t("login")}
+                    </Button>
                   </Link>
                   <Link to="/register" onClick={() => setIsOpen(false)}>
-                    <Button variant="primary" size="md" className="w-full">{t('signup')}</Button>
+                    <Button variant="primary" size="md" className="w-full">
+                      {t("signup")}
+                    </Button>
                   </Link>
                 </>
               )}

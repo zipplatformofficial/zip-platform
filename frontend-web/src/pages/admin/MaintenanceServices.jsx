@@ -43,11 +43,12 @@ const MaintenanceServices = () => {
     try {
       setLoading(true);
       const response = await api.get('/maintenance/services');
-      setServices(response.data);
+      setServices(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       toast.error('Failed to load services');
       console.error('Error fetching services:', error);
-    } finally {
+      setServices([]); // Set empty array on error
+    } finally{
       setLoading(false);
     }
   };

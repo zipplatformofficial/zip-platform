@@ -1,37 +1,45 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { FiMail, FiPhone, FiMapPin, FiFacebook, FiTwitter, FiInstagram, FiLinkedin } from 'react-icons/fi';
-import LanguageSwitcher from '../LanguageSwitcher';
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  FiMail,
+  FiPhone,
+  FiMapPin,
+  FiFacebook,
+  FiTwitter,
+  FiInstagram,
+  FiLinkedin,
+} from "react-icons/fi";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
     services: [
-      { name: 'Mobile Car Maintenance', path: '/maintenance' },
-      { name: 'Car Rentals', path: '/rentals' },
-      { name: 'Auto Parts Store', path: '/store' },
-      { name: 'Book Service', path: '/maintenance/book' },
+      { name: "Mobile Car Maintenance", path: "/maintenance" },
+      { name: "Car Rentals", path: "/rentals" },
+      { name: "Auto Parts Store", path: "/store" },
+      { name: "Book Service", path: "/maintenance/book" },
     ],
     company: [
-      { name: 'About Us', path: '/about' },
-      { name: 'Contact', path: '/contact' },
-      { name: 'Careers', path: '/careers' },
-      { name: 'Blog', path: '/blog' },
+      { name: "About Us", path: "/about" },
+      { name: "Contact", path: "/contact" },
+      { name: "Careers", path: "/careers" },
+      { name: "Blog", path: "/blog" },
     ],
     support: [
-      { name: 'Help Center', path: '/help' },
-      { name: 'Terms of Service', path: '/terms' },
-      { name: 'Privacy Policy', path: '/privacy' },
-      { name: 'FAQs', path: '/faqs' },
+      { name: "Help Center", path: "/help" },
+      { name: "Terms of Service", path: "/terms" },
+      { name: "Privacy Policy", path: "/privacy" },
+      { name: "FAQs", path: "/faqs" },
     ],
   };
 
   const socialLinks = [
-    { icon: FiFacebook, href: '#', label: 'Facebook' },
-    { icon: FiTwitter, href: '#', label: 'Twitter' },
-    { icon: FiInstagram, href: '#', label: 'Instagram' },
-    { icon: FiLinkedin, href: '#', label: 'LinkedIn' },
+    { icon: FiFacebook, href: "#", label: "Facebook" },
+    { icon: FiTwitter, href: "#", label: "Twitter" },
+    { icon: FiInstagram, href: "#", label: "Instagram" },
+    { icon: FiLinkedin, href: "#", label: "LinkedIn" },
   ];
 
   return (
@@ -42,13 +50,14 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center mb-4">
               <img
-                src="/src/assets/bg-remove/zip-logo-removebg.png"
+                src="https://i.postimg.cc/yYfX6T5z/zip-logo-removebg.png"
                 alt="ZIP Platform"
                 className="h-10 w-auto"
               />
             </Link>
             <p className="text-gray-400 mb-4 max-w-md">
-              Your one-stop solution for mobile car maintenance, rentals, and auto parts in Ghana.
+              Your one-stop solution for mobile car maintenance, rentals, and
+              auto parts in Ghana.
             </p>
             <div className="space-y-2">
               <div className="flex items-center text-gray-400">
@@ -67,7 +76,9 @@ const Footer = () => {
 
             {/* Language Switcher - Mobile Optimized */}
             <div className="mt-6">
-              <h3 className="text-white font-semibold mb-3">Language / Langue / Kasa</h3>
+              <h3 className="text-white font-semibold mb-3">
+                Language / Langue / Kasa
+              </h3>
               <LanguageSwitcher />
             </div>
           </div>

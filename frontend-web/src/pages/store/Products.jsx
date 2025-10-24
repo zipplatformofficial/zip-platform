@@ -21,9 +21,11 @@ const Products = () => {
     try {
       setLoading(true);
       const data = await storeService.getProducts();
-      setProducts(data);
+      setProducts(Array.isArray(data) ? data : []);
     } catch (error) {
       toast.error('Failed to load products');
+      console.error('Error fetching products:', error);
+      setProducts([]); // Set empty array on error to prevent filter errors
     } finally {
       setLoading(false);
     }

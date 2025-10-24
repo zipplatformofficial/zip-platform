@@ -30,6 +30,16 @@
   to = "/.netlify/functions/rentals-create"
   status = 200
 
+[[redirects]]
+  from = "/api/v1/maintenance/services"
+  to = "/.netlify/functions/maintenance-services"
+  status = 200
+
+[[redirects]]
+  from = "/api/v1/store/products"
+  to = "/.netlify/functions/store-products"
+  status = 200
+
 # SPA fallback (must be last)
 [[redirects]]
   from = "/*"
