@@ -1,7 +1,8 @@
 # Core dependencies
 fastapi==0.104.1
-uvicorn==0.24.0
+uvicorn[standard]==0.24.0
 python-dotenv==1.0.0
+websockets==12.0
 
 # Database
 psycopg2-binary==2.9.9
@@ -25,6 +26,16 @@ pytz==2023.3
 
 # Payment integrations (for Ghana)
 requests==2.31.0
+
+# AWS S3 for cloud storage
+boto3==1.34.10
+botocore==1.34.10
+
+# Cloudinary for image storage
+cloudinary==1.44.1
+
+# SMS services (Hubtel - uses requests library)
+# No additional dependency needed - Hubtel uses REST API
 
 # File handling
 python-magic==0.4.27

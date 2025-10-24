@@ -78,7 +78,7 @@ class UserUpdate(BaseModel):
 
 class UserResponse(UserBase):
     """User response schema"""
-    id: str
+    id: int  # Changed from str to int to match database
     role: UserRole
     user_type: Optional[UserType]
     is_active: bool

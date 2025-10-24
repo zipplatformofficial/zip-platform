@@ -24,19 +24,19 @@ class RentalVehicle(BaseModel):
     make = Column(String(100), nullable=False)
     model = Column(String(100), nullable=False)
     year = Column(Integer, nullable=False)
-    vehicle_type = Column(String(50), nullable=False)
+    vehicle_type = Column(String(50), nullable=False, default='car')
     license_plate = Column(String(20), unique=True, nullable=False, index=True)
     vin = Column(String(50), unique=True, nullable=True)
 
     # Specifications
     transmission = Column(String(50), nullable=False)  # Automatic/Manual
     fuel_type = Column(String(50), nullable=False)
-    seating_capacity = Column(Integer, nullable=False)
+    seating_capacity = Column(Integer, nullable=True)
     color = Column(String(50), nullable=True)
     features = Column(JSON, nullable=True)  # AC, GPS, etc.
 
     # Media
-    photos = Column(JSON, nullable=False)  # Array of photo URLs
+    photos = Column(JSON, nullable=True, default=[])  # Array of photo URLs
     description = Column(Text, nullable=True)
 
     # Pricing

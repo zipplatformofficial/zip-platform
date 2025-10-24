@@ -4,7 +4,7 @@ from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.api.v1.deps import get_db
+from app.api.v1.deps import get_db, get_current_user
 from app.core.config import settings
 from app.core.security import (
     verify_password,
@@ -21,7 +21,7 @@ from app.schemas.auth import Token, RefreshToken
 router = APIRouter()
 
 
-@router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=Token, status_code=status.HTTP_201_CREATED)
 async def register(
     user_in: UserCreate,
     db: Session = Depends(get_db)
@@ -34,6 +34,8 @@ async def register(
     - **password**: Minimum 8 characters with at least 1 digit and 1 uppercase letter
     - **full_name**: User's full name
     - **user_type**: individual, corporate, or ride_hailing_driver
+
+    Returns JWT tokens for automatic login after registration
     """
     # Check if user with email already exists
     existing_user = db.query(User).filter(User.email == user_in.email).first()
@@ -74,7 +76,15 @@ async def register(
     db.commit()
     db.refresh(db_user)
 
-    return db_user
+    # Create access and refresh tokens for automatic login
+    access_token = create_access_token(subject=str(db_user.id))
+    refresh_token = create_refresh_token(subject=str(db_user.id))
+
+    return Token(
+        access_token=access_token,
+        refresh_token=refresh_token,
+        token_type="bearer"
+    )
 
 
 @router.post("/login", response_model=Token)
@@ -185,3 +195,15 @@ async def logout():
     This endpoint is provided for consistency and can be extended with token blacklisting.
     """
     return {"message": "Successfully logged out"}
+
+
+@router.get("/me", response_model=UserResponse)
+async def get_current_user_info(
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get current authenticated user information
+
+    Returns the user details for the currently authenticated user based on the JWT token.
+    """
+    return current_user

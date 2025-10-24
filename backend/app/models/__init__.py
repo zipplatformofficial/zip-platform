@@ -29,6 +29,9 @@ from app.models.store import (
 )
 from app.models.payment import Payment, PaymentStatus, PaymentMethod
 from app.models.notification import Notification, NotificationType
+from app.models.application import RoleApplication, ApplicationStatus, ApplicationType
+from app.models.fraud import FraudAlert, FraudType, FraudStatus
+from app.models.analytics import AnalyticsEvent, DailyStats, EventType, VisitorType
 
 __all__ = [
     "User",
@@ -61,4 +64,14 @@ __all__ = [
     "PaymentMethod",
     "Notification",
     "NotificationType",
+    "RoleApplication",
+    "ApplicationStatus",
+    "ApplicationType",
+    "FraudAlert",
+    "FraudType",
+    "FraudStatus",
+    "AnalyticsEvent",
+    "DailyStats",
+    "EventType",
+    "VisitorType",
 ]

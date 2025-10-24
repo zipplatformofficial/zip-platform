@@ -76,7 +76,7 @@ class User(BaseModel):
     # Relationships
     vehicles = relationship("Vehicle", back_populates="owner", cascade="all, delete-orphan")
     service_bookings = relationship("ServiceBooking", back_populates="customer", foreign_keys="ServiceBooking.customer_id")
-    rental_bookings = relationship("RentalBooking", back_populates="customer", cascade="all, delete-orphan")
+    rental_bookings = relationship("RentalBooking", back_populates="customer", foreign_keys="RentalBooking.customer_id", cascade="all, delete-orphan")
     orders = relationship("Order", back_populates="customer", cascade="all, delete-orphan")
     payments = relationship("Payment", back_populates="user", cascade="all, delete-orphan")
     notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")

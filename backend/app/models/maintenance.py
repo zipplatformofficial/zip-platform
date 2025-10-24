@@ -46,9 +46,6 @@ class MaintenanceService(BaseModel):
     is_active = Column(Boolean, default=True, nullable=False)
     icon = Column(String(500), nullable=True)
 
-    # Relationships
-    bookings = relationship("ServiceBooking", secondary="service_booking_services")
-
     def __repr__(self):
         return f"<MaintenanceService {self.name}>"
 

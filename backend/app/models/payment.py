@@ -83,7 +83,7 @@ class Payment(BaseModel):
     invoice_url = Column(String(500), nullable=True)
 
     # Metadata
-    metadata = Column(JSON, nullable=True)
+    payment_metadata = Column(JSON, nullable=True)
     ip_address = Column(String(50), nullable=True)
     user_agent = Column(String(500), nullable=True)
 

@@ -6,16 +6,13 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_, and_
 import uuid
 
-from app.api.v1.deps import get_db, get_current_active_user, require_admin
+from app.api.v1.deps import get_db, get_current_active_user, require_admin, require_rental_manager
 from app.models.user import User
 from app.models.rental import (
     RentalVehicle,
     RentalBooking,
     VehicleInspection,
-    RentalStatus,
-    VehicleStatus,
-    FuelType,
-    TransmissionType
+    RentalBookingStatus as RentalStatus
 )
 from app.schemas.rental import (
     RentalVehicleCreate,
@@ -41,8 +38,8 @@ async def list_rental_vehicles(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
     make: Optional[str] = None,
-    fuel_type: Optional[FuelType] = None,
-    transmission: Optional[TransmissionType] = None,
+    fuel_type: Optional[str] = None,
+    transmission: Optional[str] = None,
     min_seats: Optional[int] = None,
     max_daily_rate: Optional[float] = None,
     available_only: bool = True,
@@ -58,7 +55,7 @@ async def list_rental_vehicles(
     - **max_daily_rate**: Maximum daily rental rate
     - **available_only**: Show only available vehicles
     """
-    query = db.query(RentalVehicle).filter(RentalVehicle.status == VehicleStatus.ACTIVE)
+    query = db.query(RentalVehicle)
 
     if available_only:
         query = query.filter(RentalVehicle.is_available == True)
@@ -73,7 +70,7 @@ async def list_rental_vehicles(
         query = query.filter(RentalVehicle.transmission == transmission)
 
     if min_seats:
-        query = query.filter(RentalVehicle.seats >= min_seats)
+        query = query.filter(RentalVehicle.seating_capacity >= min_seats)
 
     if max_daily_rate:
         query = query.filter(RentalVehicle.daily_rate <= max_daily_rate)
@@ -145,9 +142,9 @@ async def check_vehicle_availability(
 async def create_rental_vehicle(
     vehicle_in: RentalVehicleCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_admin)
+    current_user: User = Depends(require_rental_manager)
 ):
-    """Create a new rental vehicle (Admin only)"""
+    """Create a new rental vehicle (Rental Manager or Admin)"""
     vehicle = RentalVehicle(**vehicle_in.model_dump())
 
     db.add(vehicle)
@@ -162,7 +159,7 @@ async def update_rental_vehicle(
     vehicle_id: str,
     vehicle_update: RentalVehicleUpdate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_admin)
+    current_user: User = Depends(require_rental_manager)
 ):
     """Update a rental vehicle (Admin only)"""
     vehicle = db.query(RentalVehicle).filter(RentalVehicle.id == vehicle_id).first()
@@ -196,7 +193,7 @@ async def create_rental_booking(
     vehicle = db.query(RentalVehicle).filter(
         RentalVehicle.id == booking_in.vehicle_id,
         RentalVehicle.is_available == True,
-        RentalVehicle.status == VehicleStatus.ACTIVE
+        RentalVehicle.status == "active"
     ).first()
 
     if not vehicle:

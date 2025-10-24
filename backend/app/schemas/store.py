@@ -42,8 +42,8 @@ class ProductUpdate(BaseModel):
 
 class ProductResponse(ProductBase):
     """Product response schema"""
-    id: str
-    vendor_id: str
+    id: int
+    vendor_id: int
     sku: str
     images: Optional[List[str]]
     specifications: Optional[Dict[str, Any]]
@@ -70,7 +70,7 @@ class VendorBase(BaseModel):
 
 class VendorCreate(VendorBase):
     """Create vendor schema"""
-    user_id: str
+    user_id: int
     business_address: Dict[str, Any]
     business_phone: str
 
@@ -87,8 +87,8 @@ class VendorUpdate(BaseModel):
 
 class VendorResponse(VendorBase):
     """Vendor response schema"""
-    id: str
-    user_id: str
+    id: int
+    user_id: int
     business_address: Dict[str, Any]
     business_phone: str
     is_verified: bool
@@ -106,7 +106,7 @@ class VendorResponse(VendorBase):
 # Cart Schemas
 class CartItemAdd(BaseModel):
     """Add item to cart schema"""
-    product_id: str
+    product_id: int
     quantity: int = Field(gt=0)
 
 
@@ -117,8 +117,8 @@ class CartItemUpdate(BaseModel):
 
 class CartItemResponse(BaseModel):
     """Cart item response schema"""
-    id: str
-    product_id: str
+    id: int
+    product_id: int
     quantity: int
     unit_price: float
     subtotal: float
@@ -130,8 +130,8 @@ class CartItemResponse(BaseModel):
 
 class CartResponse(BaseModel):
     """Cart response schema"""
-    id: str
-    user_id: str
+    id: int
+    user_id: int
     items: List[CartItemResponse]
     total_items: int
     total_price: float
@@ -157,9 +157,9 @@ class OrderUpdate(BaseModel):
 
 class OrderItemResponse(BaseModel):
     """Order item response schema"""
-    id: str
-    product_id: str
-    vendor_id: str
+    id: int
+    product_id: int
+    vendor_id: int
     quantity: int
     unit_price: float
     subtotal: float
@@ -170,8 +170,8 @@ class OrderItemResponse(BaseModel):
 
 class OrderResponse(BaseModel):
     """Order response schema"""
-    id: str
-    customer_id: str
+    id: int
+    customer_id: int
     order_number: str
     status: OrderStatus
     items: List[OrderItemResponse]
@@ -195,7 +195,7 @@ class OrderResponse(BaseModel):
 # Product Review Schemas
 class ProductReviewCreate(BaseModel):
     """Create product review schema"""
-    product_id: str
+    product_id: int
     rating: int = Field(ge=1, le=5)
     title: str
     review_text: str
@@ -204,9 +204,9 @@ class ProductReviewCreate(BaseModel):
 
 class ProductReviewResponse(BaseModel):
     """Product review response schema"""
-    id: str
-    product_id: str
-    customer_id: str
+    id: int
+    product_id: int
+    customer_id: int
     rating: int
     title: str
     review_text: str

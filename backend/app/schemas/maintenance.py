@@ -2,17 +2,17 @@
 from typing import Optional, Dict, Any
 from datetime import datetime
 from pydantic import BaseModel, Field
-from app.models.maintenance import BookingStatus
+from app.models.maintenance import ServiceBookingStatus as BookingStatus
 
 
 # Maintenance Service Schemas
 class MaintenanceServiceBase(BaseModel):
     """Base maintenance service schema"""
     name: str
-    description: str
-    category: str
+    description: Optional[str] = None
+    service_type: str
     base_price: float = Field(gt=0)
-    estimated_duration: int  # minutes
+    estimated_duration: Optional[int] = None  # minutes
 
 
 class MaintenanceServiceCreate(MaintenanceServiceBase):
@@ -24,7 +24,7 @@ class MaintenanceServiceUpdate(BaseModel):
     """Update maintenance service schema"""
     name: Optional[str] = None
     description: Optional[str] = None
-    category: Optional[str] = None
+    service_type: Optional[str] = None
     base_price: Optional[float] = Field(None, gt=0)
     estimated_duration: Optional[int] = None
     is_active: Optional[bool] = None
@@ -32,8 +32,9 @@ class MaintenanceServiceUpdate(BaseModel):
 
 class MaintenanceServiceResponse(MaintenanceServiceBase):
     """Maintenance service response schema"""
-    id: str
+    id: int
     is_active: bool
+    icon: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 
@@ -51,7 +52,7 @@ class TechnicianBase(BaseModel):
 
 class TechnicianCreate(TechnicianBase):
     """Create technician schema"""
-    user_id: str
+    user_id: int
 
 
 class TechnicianUpdate(BaseModel):
@@ -65,8 +66,8 @@ class TechnicianUpdate(BaseModel):
 
 class TechnicianResponse(TechnicianBase):
     """Technician response schema"""
-    id: str
-    user_id: str
+    id: int
+    user_id: int
     is_available: bool
     is_verified: bool
     average_rating: float
@@ -82,8 +83,8 @@ class TechnicianResponse(TechnicianBase):
 # Service Booking Schemas
 class ServiceBookingBase(BaseModel):
     """Base service booking schema"""
-    service_id: str
-    vehicle_id: str
+    service_id: int
+    vehicle_id: int
     scheduled_date: datetime
     location: Dict[str, Any]
     notes: Optional[str] = None
@@ -104,9 +105,9 @@ class ServiceBookingUpdate(BaseModel):
 
 class ServiceBookingResponse(ServiceBookingBase):
     """Service booking response schema"""
-    id: str
-    customer_id: str
-    technician_id: Optional[str]
+    id: int
+    customer_id: int
+    technician_id: Optional[int]
     status: BookingStatus
     final_price: Optional[float]
     started_at: Optional[datetime]

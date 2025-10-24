@@ -6,7 +6,7 @@ from sqlalchemy import or_
 
 from app.api.v1.deps import get_db, get_current_active_user, require_admin
 from app.models.user import User
-from app.models.maintenance import MaintenanceService, ServiceBooking, Technician, BookingStatus
+from app.models.maintenance import MaintenanceService, ServiceBooking, Technician, ServiceBookingStatus as BookingStatus
 from app.models.vehicle import Vehicle
 from app.schemas.maintenance import (
     MaintenanceServiceCreate,
@@ -30,7 +30,7 @@ router = APIRouter()
 async def list_maintenance_services(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
-    category: Optional[str] = None,
+    service_type: Optional[str] = None,
     search: Optional[str] = None,
     active_only: bool = True,
     db: Session = Depends(get_db)
@@ -38,7 +38,7 @@ async def list_maintenance_services(
     """
     List all maintenance services
 
-    - **category**: Filter by service category
+    - **service_type**: Filter by service type
     - **search**: Search in name and description
     - **active_only**: Show only active services (default: true)
     """
@@ -47,8 +47,8 @@ async def list_maintenance_services(
     if active_only:
         query = query.filter(MaintenanceService.is_active == True)
 
-    if category:
-        query = query.filter(MaintenanceService.category == category)
+    if service_type:
+        query = query.filter(MaintenanceService.service_type == service_type)
 
     if search:
         search_term = f"%{search}%"

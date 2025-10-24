@@ -9,7 +9,7 @@ from app.models import (
     User, Vehicle, MaintenanceService, ServiceBooking, Technician,
     RentalVehicle, RentalBooking, VehicleInspection, FleetSubscription,
     Product, Vendor, Order, OrderItem, ProductReview, Cart, CartItem,
-    Payment, Notification
+    Payment, Notification, RoleApplication
 )
 
 # Create FastAPI app
@@ -24,26 +24,31 @@ app = FastAPI(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origins=settings.get_cors_origins(),
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=3600,
 )
 
 
 @app.on_event("startup")
 async def startup_event():
     """Run on application startup"""
-    # Create database tables
-    Base.metadata.create_all(bind=engine)
-    print("✅ Database tables created")
-    print(f"✅ {settings.APP_NAME} API started")
+    # Create database tables (commented out - use Alembic migrations in production)
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("[OK] Database tables created")
+    except Exception as e:
+        print(f"[WARNING] Database tables may already exist: {str(e)}")
+    print(f"[OK] {settings.APP_NAME} API started")
 
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Run on application shutdown"""
-    print(f"👋 {settings.APP_NAME} API shutting down")
+    print(f"[BYE] {settings.APP_NAME} API shutting down")
 
 
 @app.get("/")

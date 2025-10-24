@@ -2,7 +2,7 @@
 from typing import Optional, Dict, Any, List
 from datetime import datetime, date
 from pydantic import BaseModel, Field
-from app.models.rental import RentalStatus, VehicleStatus, FuelType, TransmissionType
+from app.models.rental import RentalBookingStatus as RentalStatus
 
 
 # Rental Vehicle Schemas
@@ -11,20 +11,22 @@ class RentalVehicleBase(BaseModel):
     make: str
     model: str
     year: int = Field(ge=1900, le=2100)
-    registration_number: str
-    color: str
-    fuel_type: FuelType
-    transmission: TransmissionType
-    seats: int = Field(ge=1, le=50)
+    license_plate: str
+    color: Optional[str] = None
+    fuel_type: str
+    transmission: str
+    seating_capacity: Optional[int] = Field(None, ge=1, le=50)
     daily_rate: float = Field(gt=0)
-    weekly_rate: Optional[float] = Field(None, gt=0)
-    monthly_rate: Optional[float] = Field(None, gt=0)
+    vehicle_type: str = "car"  # Default value
+    vin: Optional[str] = None
+    features: Optional[List[str]] = None
+    is_available: bool = True
 
 
 class RentalVehicleCreate(RentalVehicleBase):
     """Create rental vehicle schema"""
-    features: Optional[List[str]] = None
-    images: Optional[List[str]] = None
+    photos: Optional[List[str]] = []  # Default to empty array
+    description: Optional[str] = None
 
 
 class RentalVehicleUpdate(BaseModel):
@@ -33,29 +35,38 @@ class RentalVehicleUpdate(BaseModel):
     model: Optional[str] = None
     year: Optional[int] = Field(None, ge=1900, le=2100)
     color: Optional[str] = None
-    fuel_type: Optional[FuelType] = None
-    transmission: Optional[TransmissionType] = None
+    fuel_type: Optional[str] = None
+    transmission: Optional[str] = None
     seats: Optional[int] = Field(None, ge=1, le=50)
     daily_rate: Optional[float] = Field(None, gt=0)
     weekly_rate: Optional[float] = Field(None, gt=0)
     monthly_rate: Optional[float] = Field(None, gt=0)
     features: Optional[List[str]] = None
     images: Optional[List[str]] = None
-    status: Optional[VehicleStatus] = None
+    status: Optional[str] = None
     is_available: Optional[bool] = None
 
 
-class RentalVehicleResponse(RentalVehicleBase):
+class RentalVehicleResponse(BaseModel):
     """Rental vehicle response schema"""
-    id: str
-    features: Optional[List[str]]
-    images: Optional[List[str]]
-    status: VehicleStatus
+    id: int
+    make: str
+    model: str
+    year: int
+    license_plate: str
+    color: Optional[str] = None
+    fuel_type: str
+    transmission: str
+    seating_capacity: Optional[int] = None
+    daily_rate: float
+    vehicle_type: str
+    vin: Optional[str] = None
+    features: Optional[List[str]] = None
+    photos: Optional[List[str]] = None
+    description: Optional[str] = None
     is_available: bool
-    current_mileage: int
-    average_rating: float
-    total_ratings: int
-    total_trips: int
+    average_rating: float = 0.0
+    total_rentals: int = 0
     created_at: datetime
     updated_at: datetime
 
@@ -66,7 +77,7 @@ class RentalVehicleResponse(RentalVehicleBase):
 # Rental Booking Schemas
 class RentalBookingBase(BaseModel):
     """Base rental booking schema"""
-    vehicle_id: str
+    vehicle_id: int
     start_date: date
     end_date: date
     pickup_location: Dict[str, Any]
@@ -91,8 +102,8 @@ class RentalBookingUpdate(BaseModel):
 
 class RentalBookingResponse(RentalBookingBase):
     """Rental booking response schema"""
-    id: str
-    customer_id: str
+    id: int
+    customer_id: int
     booking_number: str
     status: RentalStatus
     total_days: int
@@ -130,7 +141,7 @@ class RentalBookingRating(BaseModel):
 # Vehicle Inspection Schemas
 class VehicleInspectionCreate(BaseModel):
     """Create vehicle inspection schema"""
-    booking_id: str
+    booking_id: int
     inspection_type: str  # pickup or return
     odometer_reading: int = Field(ge=0)
     fuel_level: int = Field(ge=0, le=100)
@@ -144,9 +155,9 @@ class VehicleInspectionCreate(BaseModel):
 
 class VehicleInspectionResponse(BaseModel):
     """Vehicle inspection response schema"""
-    id: str
-    booking_id: str
-    inspector_id: str
+    id: int
+    booking_id: int
+    inspector_id: int
     inspection_type: str
     odometer_reading: int
     fuel_level: int

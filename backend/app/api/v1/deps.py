@@ -120,3 +120,24 @@ async def require_vendor(
 ) -> User:
     """Require vendor or admin role"""
     return current_user
+
+
+async def require_rental_manager(
+    current_user: User = Depends(require_role([UserRole.RENTAL_MANAGER, UserRole.ADMIN]))
+) -> User:
+    """Require rental manager or admin role"""
+    return current_user
+
+
+async def require_operations_manager(
+    current_user: User = Depends(require_role([UserRole.OPERATIONS_MANAGER, UserRole.ADMIN]))
+) -> User:
+    """Require operations manager or admin role"""
+    return current_user
+
+
+async def require_customer_support(
+    current_user: User = Depends(require_role([UserRole.CUSTOMER_SUPPORT, UserRole.ADMIN]))
+) -> User:
+    """Require customer support or admin role"""
+    return current_user

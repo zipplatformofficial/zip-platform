@@ -1,7 +1,7 @@
 """Application configuration"""
 from typing import List, Optional
-from pydantic_settings import BaseSettings
-from pydantic import PostgresDsn, validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import PostgresDsn, Field
 
 
 class Settings(BaseSettings):
@@ -25,27 +25,30 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
-    # CORS
-    ALLOWED_ORIGINS: List[str] = ["*"]
+    # CORS - stored as string
+    ALLOWED_ORIGINS: str = "*"
 
-    @validator("ALLOWED_ORIGINS", pre=True)
-    def assemble_cors_origins(cls, v):
-        if isinstance(v, str):
-            return [i.strip() for i in v.split(",")]
-        return v
+    def get_cors_origins(self) -> List[str]:
+        """Parse CORS origins from comma-separated string"""
+        if "," in self.ALLOWED_ORIGINS:
+            return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",")]
+        return [self.ALLOWED_ORIGINS]
 
     # File Upload
     MAX_FILE_SIZE: int = 5242880  # 5MB
     UPLOAD_DIR: str = "uploads"
 
-    # Payment Gateway
-    MTN_MOMO_API_KEY: Optional[str] = None
-    VODAFONE_CASH_API_KEY: Optional[str] = None
-    AIRTELTIGO_MONEY_API_KEY: Optional[str] = None
+    # Payment Gateway - Paystack
+    PAYSTACK_SECRET_KEY: Optional[str] = None
+    PAYSTACK_PUBLIC_KEY: Optional[str] = None
+    PAYSTACK_WEBHOOK_SECRET: Optional[str] = None
+    PAYSTACK_CALLBACK_URL: Optional[str] = None
 
-    # SMS
-    SMS_API_KEY: Optional[str] = None
-    SMS_SENDER_ID: str = "ZIP"
+    # SMS - Hubtel
+    HUBTEL_CLIENT_ID: Optional[str] = None
+    HUBTEL_CLIENT_SECRET: Optional[str] = None
+    HUBTEL_API_KEY: Optional[str] = None
+    HUBTEL_SENDER_ID: str = "ZIP"
 
     # Email
     SMTP_HOST: str = "smtp.gmail.com"
@@ -53,6 +56,23 @@ class Settings(BaseSettings):
     SMTP_USER: Optional[str] = None
     SMTP_PASSWORD: Optional[str] = None
     EMAIL_FROM: str = "noreply@zipghana.com"
+
+    # Firebase Cloud Messaging
+    FIREBASE_SERVER_KEY: Optional[str] = None
+    FIREBASE_CREDENTIALS_PATH: Optional[str] = None
+
+    # AWS S3
+    AWS_ACCESS_KEY_ID: Optional[str] = None
+    AWS_SECRET_ACCESS_KEY: Optional[str] = None
+    AWS_S3_BUCKET_NAME: Optional[str] = None
+    AWS_S3_REGION: str = "us-east-1"
+    AWS_S3_CDN_URL: Optional[str] = None
+
+    # Cloudinary
+    CLOUDINARY_CLOUD_NAME: Optional[str] = None
+    CLOUDINARY_API_KEY: Optional[str] = None
+    CLOUDINARY_API_SECRET: Optional[str] = None
+    CLOUDINARY_FOLDER: str = "zip-platform"  # Folder to organize uploads
 
     # Admin
     ADMIN_EMAIL: str = "admin@zipghana.com"
@@ -65,16 +85,21 @@ class Settings(BaseSettings):
     VENDOR_COMMISSION_RATE: float = 0.12
     TECHNICIAN_COMMISSION_RATE: float = 0.10
 
-    # Verification
-    GHANA_CARD_VERIFICATION_API: Optional[str] = None
+    # Verification - Smile ID
+    SMILE_ID_PARTNER_ID: Optional[str] = None
+    SMILE_ID_API_KEY: Optional[str] = None
+    SMILE_ID_CALLBACK_URL: Optional[str] = None
+    SMILE_ID_ENVIRONMENT: str = "sandbox"  # sandbox or production
 
     # Pagination
     DEFAULT_PAGE_SIZE: int = 20
     MAX_PAGE_SIZE: int = 100
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    model_config = SettingsConfigDict(
+        env_file = ".env",
+        case_sensitive = True,
+        extra = "ignore"
+    )
 
 
 # Create global settings instance
