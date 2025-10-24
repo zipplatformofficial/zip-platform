@@ -46,9 +46,9 @@ npm run dev
 - **Backend API:** http://localhost:8000/api/v1
 - **API Documentation:** http://localhost:8000/docs
 
-### Default Credentials
-- **Email:** admin@zip.com
-- **Password:** Admin@123
+### Admin Setup
+- **See:** `SECURITY_SETUP.md` for secure admin account creation
+- **⚠️ NEVER use default credentials in production!**
 
 ## 📦 Tech Stack
 

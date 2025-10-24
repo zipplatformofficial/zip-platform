@@ -28,9 +28,6 @@ dist-ssr
 .env.local
 .env.*.local
 
-# Claude AI
-.claude/
-
 # Build output
 build/
 .cache/

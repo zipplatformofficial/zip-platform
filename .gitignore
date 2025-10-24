@@ -39,6 +39,3 @@ logs/
 # Temporary files
 *.tmp
 *.temp
-
-# AI Assistant
-.claude/
