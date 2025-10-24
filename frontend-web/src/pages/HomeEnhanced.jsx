@@ -6,6 +6,8 @@ import Button from '../components/ui/Button';
 import Card, { CardContent } from '../components/ui/Card';
 import StatsSection from '../components/home/StatsSection';
 import BrandLogos from '../components/home/BrandLogos';
+import Reviews from '../components/home/Reviews';
+import SocialProof from '../components/home/SocialProof';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import zipLogo from '../assets/zip-logo.jpg';
@@ -757,6 +759,9 @@ const HomeEnhanced = () => {
         </div>
       </section>
 
+      {/* Reviews Section */}
+      <Reviews />
+
       {/* CTA Section */}
       <section className="py-20 px-4 bg-gradient-to-br from-primary-500 to-primary-600">
         <div className="max-w-4xl mx-auto text-center">
@@ -780,6 +785,9 @@ const HomeEnhanced = () => {
           </div>
         </div>
       </section>
+
+      {/* Social Proof Notifications */}
+      <SocialProof />
     </div>
   );
 };

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiSliders, FiX, FiSearch, FiCalendar, FiMapPin, FiGrid, FiList } from 'react-icons/fi';
+import { FiSliders, FiX, FiSearch, FiCalendar, FiMapPin, FiGrid, FiList, FiEye, FiBarChart2 } from 'react-icons/fi';
 import { rentalService } from '../../services/rentalService';
 import VehicleCardEnhanced from '../../components/rentals/VehicleCardEnhanced';
+import QuickViewModal from '../../components/rentals/QuickViewModal';
+import CompareModal from '../../components/rentals/CompareModal';
+import { VehicleCardSkeleton } from '../../components/ui/SkeletonLoader';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import Loading from '../../components/ui/Loading';
@@ -20,6 +23,12 @@ const VehiclesEnhanced = () => {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+
+  // New states for Quick View and Comparison
+  const [showQuickView, setShowQuickView] = useState(false);
+  const [quickViewVehicle, setQuickViewVehicle] = useState(null);
+  const [compareVehicles, setCompareVehicles] = useState([]);
+  const [showCompareModal, setShowCompareModal] = useState(false);
 
   const [filters, setFilters] = useState({
     make: '',
@@ -152,12 +161,66 @@ const VehiclesEnhanced = () => {
     }
   };
 
-  if (loading) {
-    return <Loading fullScreen />;
-  }
+  // Quick View handlers
+  const handleQuickView = (vehicle) => {
+    setQuickViewVehicle(vehicle);
+    setShowQuickView(true);
+  };
+
+  // Compare handlers
+  const handleToggleCompare = (vehicle) => {
+    const isAlreadyComparing = compareVehicles.some(v => v.id === vehicle.id);
+
+    if (isAlreadyComparing) {
+      setCompareVehicles(compareVehicles.filter(v => v.id !== vehicle.id));
+      toast.success('Removed from comparison');
+    } else {
+      if (compareVehicles.length >= 3) {
+        toast.error('You can only compare up to 3 vehicles');
+        return;
+      }
+      setCompareVehicles([...compareVehicles, vehicle]);
+      toast.success('Added to comparison');
+    }
+  };
+
+  const handleRemoveFromCompare = (vehicleId) => {
+    setCompareVehicles(compareVehicles.filter(v => v.id !== vehicleId));
+  };
+
+  const handleOpenCompare = () => {
+    if (compareVehicles.length === 0) {
+      toast.error('Please select at least one vehicle to compare');
+      return;
+    }
+    setShowCompareModal(true);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20 pb-12">
+      {/* Floating Compare Bar */}
+      {compareVehicles.length > 0 && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 animate-slide-in-right">
+          <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-full shadow-2xl px-6 py-4 flex items-center gap-4">
+            <FiBarChart2 className="h-6 w-6" />
+            <span className="font-bold">
+              {compareVehicles.length} vehicle{compareVehicles.length > 1 ? 's' : ''} selected
+            </span>
+            <button
+              onClick={handleOpenCompare}
+              className="px-4 py-2 bg-white text-red-500 rounded-full font-bold hover:bg-gray-100 transition-all"
+            >
+              Compare Now
+            </button>
+            <button
+              onClick={() => setCompareVehicles([])}
+              className="p-2 hover:bg-white/20 rounded-full transition-all"
+            >
+              <FiX className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+      )}
       {/* Enhanced Hero Section */}
       <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white overflow-hidden">
         {/* Background Pattern */}
@@ -414,17 +477,49 @@ const VehiclesEnhanced = () => {
           {/* Vehicles Grid */}
           <div className="flex-1">
             <div className="mb-4 text-sm sm:text-base text-gray-600 font-medium px-2">
-              Showing {filteredVehicles.length} of {vehicles.length} vehicles
+              {loading ? (
+                'Loading vehicles...'
+              ) : (
+                `Showing ${filteredVehicles.length} of ${vehicles.length} vehicles`
+              )}
             </div>
 
-            {filteredVehicles.length > 0 ? (
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <VehicleCardSkeleton key={i} />
+                ))}
+              </div>
+            ) : filteredVehicles.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                 {filteredVehicles.map((vehicle) => (
-                  <VehicleCardEnhanced
-                    key={vehicle.id}
-                    vehicle={vehicle}
-                    onBook={handleBookVehicle}
-                  />
+                  <div key={vehicle.id} className="relative group">
+                    <VehicleCardEnhanced
+                      vehicle={vehicle}
+                      onBook={handleBookVehicle}
+                    />
+                    {/* Quick Action Buttons */}
+                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
+                      <button
+                        onClick={() => handleQuickView(vehicle)}
+                        className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:scale-110 transition-all"
+                        title="Quick View"
+                      >
+                        <FiEye className="h-5 w-5 text-gray-700" />
+                      </button>
+                      <button
+                        onClick={() => handleToggleCompare(vehicle)}
+                        className={`p-2 rounded-full shadow-lg hover:scale-110 transition-all ${
+                          compareVehicles.some(v => v.id === vehicle.id)
+                            ? 'bg-red-500 text-white'
+                            : 'bg-white/90 backdrop-blur-sm text-gray-700 hover:bg-white'
+                        }`}
+                        title="Add to Compare"
+                      >
+                        <FiBarChart2 className="h-5 w-5" />
+                      </button>
+                    </div>
+                  </div>
                 ))}
               </div>
             ) : (
@@ -520,6 +615,23 @@ const VehiclesEnhanced = () => {
             </div>
           </form>
         </Modal>
+
+        {/* Quick View Modal */}
+        <QuickViewModal
+          vehicle={quickViewVehicle}
+          isOpen={showQuickView}
+          onClose={() => setShowQuickView(false)}
+          onBook={handleBookVehicle}
+        />
+
+        {/* Compare Modal */}
+        <CompareModal
+          vehicles={compareVehicles}
+          isOpen={showCompareModal}
+          onClose={() => setShowCompareModal(false)}
+          onRemove={handleRemoveFromCompare}
+          onBook={handleBookVehicle}
+        />
       </div>
     </div>
   );
